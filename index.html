@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>简单电路与欧姆定律 - 交互式可视化</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    user-select: none;
+  }
+  .container {
+    background: linear-gradient(145deg, #161b22, #0d1117);
+    border-radius: 20px;
+    padding: 30px 40px 35px;
+    box-shadow: 0 0 60px rgba(30, 100, 200, 0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid #30363d;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #58a6ff, #79c0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  canvas {
+    display: block;
+    margin: 0 auto;
+    border-radius: 12px;
+    background: #0d1117;
+    border: 1px solid #21262d;
+    cursor: pointer;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 40px;
+    margin-top: 20px;
+    padding: 18px 20px 14px;
+    background: rgba(22, 27, 34, 0.8);
+    border-radius: 12px;
+    border: 1px solid #21262d;
+    justify-content: center;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 200px;
+  }
+  .control-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #8b949e;
+    letter-spacing: 1px;
+  }
+  .control-group label span {
+    color: #f0f6fc;
+    font-weight: 600;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+    background: #21262d;
+    transition: background 0.2s;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #58a6ff, #1f6feb);
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(88, 166, 255, 0.3);
+    border: 2px solid #0d1117;
+    transition: transform 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #58a6ff, #1f6feb);
+    cursor: pointer;
+    border: 2px solid #0d1117;
+  }
+  .voltage-slider { accent-color: #ff6b6b; }
+  .voltage-slider::-webkit-slider-thumb { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+  .resistance-slider { accent-color: #ffd93d; }
+  .resistance-slider::-webkit-slider-thumb { background: linear-gradient(135deg, #ffd93d, #f0932b); }
+  .readouts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 30px;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0;
+  }
+  .readout-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: #8b949e;
+  }
+  .readout-item .value {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Consolas', 'Courier New', monospace;
+  }
+  .readout-item .value.voltage { color: #ff6b6b; }
+  .readout-item .value.resistance { color: #ffd93d; }
+  .readout-item .value.current { color: #7ee787; }
+  .formula-box {
+    text-align: center;
+    font-size: 18px;
+    padding: 6px 18px;
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    border-radius: 8px;
+    color: #58a6ff;
+    font-family: 'Consolas', 'Courier New', monospace;
+    letter-spacing: 1px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .status-badge.closed {
+    background: rgba(46, 160, 67, 0.2);
+    color: #7ee787;
+    border: 1px solid rgba(46, 160, 67, 0.3);
+  }
+  .status-badge.open {
+    background: rgba(248, 81, 73, 0.2);
+    color: #ff7b72;
+    border: 1px solid rgba(248, 81, 73, 0.3);
+  }
+  .footer-note {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #484f58;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚡ 简单电路与欧姆定律</h1>
+  <canvas id="circuitCanvas" width="800" height="500"></canvas>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>电压 <span>U</span> = <span id="voltageDisplay">6.0</span> V</label>
+      <input type="range" id="voltageSlider" class="voltage-slider" min="1" max="12" value="6" step="0.5">
+    </div>
+    <div class="control-group">
+      <label>电阻 <span>R</span> = <span id="resistanceDisplay">10</span> Ω</label>
+      <input type="range" id="resistanceSlider" class="resistance-slider" min="1" max="50" value="10" step="1">
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="readout-item">
+      U = <span class="value voltage" id="readoutVoltage">6.0</span> V
+    </div>
+    <div class="readout-item">
+      R = <span class="value resistance" id="readoutResistance">10</span> Ω
+    </div>
+    <div class="readout-item">
+      I = <span class="value current" id="readoutCurrent">0.60</span> A
+    </div>
+    <div class="formula-box">U = I × R</div>
+    <div class="status-badge closed" id="statusBadge">
+      <span id="statusIcon">●</span>
+      <span id="statusText">电路闭合</span>
+    </div>
+  </div>
+  <div class="footer-note">💡 点击开关切换电路通断 · 拖动滑块调节电压和电阻</div>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('circuitCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 800, H = 500;
+
+  // ---- State ----
+  let voltage = 6.0;
+  let resistance = 10;
+  let switchClosed = true;
+
+  // ---- DOM refs ----
+  const voltageSlider = document.getElementById('voltageSlider');
+  const resistanceSlider = document.getElementById('resistanceSlider');
+  const voltageDisplay = document.getElementById('voltageDisplay');
+  const resistanceDisplay = document.getElementById('resistanceDisplay');
+  const readoutVoltage = document.getElementById('readoutVoltage');
+  const readoutResistance = document.getElementById('readoutResistance');
+  const readoutCurrent = document.getElementById('readoutCurrent');
+  const statusBadge = document.getElementById('statusBadge');
+  const statusIcon = document.getElementById('statusIcon');
+  const statusText = document.getElementById('statusText');
+
+  // ---- Circuit geometry ----
+  // Circuit rectangle: (150,100) to (650,400)
+  // Component gaps on each side
+  const BAT_GAP_LEFT  = 340;
+  const BAT_GAP_RIGHT = 460;
+  const BAT_Y = 100;
+
+  const SWITCH_GAP_TOP    = 210;
+  const SWITCH_GAP_BOTTOM = 290;
+  const SWITCH_X = 150;
+
+  const BULB_GAP_LEFT  = 340;
+  const BULB_GAP_RIGHT = 460;
+  const BULB_Y = 400;
+
+  const RES_GAP_TOP    = 185;
+  const RES_GAP_BOTTOM = 315;
+  const RES_X = 650;
+
+  const CORNER_TL = {x:150, y:100};
+  const CORNER_TR = {x:650, y:100};
+  const CORNER_BR = {x:650, y:400};
+  const CORNER_BL = {x:150, y:400};
+
+  // ---- Electron path segments (clockwise from top-left) ----
+  function getSegments() {
+    return [
+      {x1:150, y1:100, x2:BAT_GAP_LEFT,      y2:100},  // 0: top-left → battery-left
+      {x1:BAT_GAP_RIGHT, y1:100, x2:650,      y2:100},  // 1: battery-right → top-right
+      {x1:650, y1:100, x2:650, y2:RES_GAP_TOP},         // 2: top-right → resistor-top
+      {x1:650, y1:RES_GAP_BOTTOM, x2:650, y2:400},      // 3: resistor-bottom → bottom-right
+      {x1:650, y1:400, x2:BULB_GAP_RIGHT, y2:400},      // 4: bottom-right → bulb-right
+      {x1:BULB_GAP_LEFT, y1:400, x2:150, y2:400},       // 5: bulb-left → bottom-left
+      {x1:150, y1:400, x2:150, y2:SWITCH_GAP_BOTTOM},   // 6: bottom-left → switch-bottom
+      {x1:150, y1:SWITCH_GAP_TOP, x2:150, y2:100},      // 7: switch-top → top-left
+    ];
+  }
+
+  // Precompute segment lengths
+  let segments = getSegments();
+  let segLengths = segments.map(s => Math.hypot(s.x2-s.x1, s.y2-s.y1));
+  let totalLength = segLengths.reduce((a,b)=>a+b, 0);
+
+  function rebuildSegments() {
+    segments = getSegments();
+    segLengths = segments.map(s => Math.hypot(s.x2-s.x1, s.y2-s.y1));
+    totalLength = segLengths.reduce((a,b)=>a+b, 0);
+  }
+
+  // Get (x,y) from position along path (0 to totalLength)
+  function getPathPosition(pos) {
+    pos = ((pos % totalLength) + totalLength) % totalLength;
+    let accum = 0;
+    for (let i = 0; i < segments.length; i++) {
+      const len = segLengths[i];
+      if (accum + len >= pos) {
+        const t = (pos - accum) / len;
+        const s = segments[i];
+        return {x: s.x1 + (s.x2 - s.x1) * t, y: s.y1 + (s.y2 - s.y1) * t};
+      }
+      accum += len;
+    }
+    const last = segments[segments.length-1];
+    return {x: last.x2, y: last.y2};
+  }
+
+  // ---- Electrons ----
+  const NUM_ELECTRONS = 20;
+  const electronOffsets = [];
+  for (let i = 0; i < NUM_ELECTRONS; i++) {
+    electronOffsets.push((i / NUM_ELECTRONS) * totalLength);
+  }
+
+  let electronSpeed = 0;
+
+  // ---- Compute derived values ----
+  function getCurrent() {
+    if (!switchClosed) return 0;
+    return voltage / resistance;
+  }
+
+  function getBulbBrightness() {
+    const I = getCurrent();
+    if (I <= 0) return 0;
+    const maxI = 12 / 1; // 12A
+    // Power-law mapping for realistic perception
+    return Math.min(1, Math.pow(I / maxI, 0.45));
+  }
+
+  // ---- Drawing functions ----
+
+  function drawWires() {
+    ctx.strokeStyle = '#58a6ff';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = 'rgba(88, 166, 255, 0.15)';
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    // Top wire
+    ctx.moveTo(150, 100); ctx.lineTo(BAT_GAP_LEFT, 100);
+    ctx.moveTo(BAT_GAP_RIGHT, 100); ctx.lineTo(650, 100);
+    // Right wire
+    ctx.moveTo(650, 100); ctx.lineTo(650, RES_GAP_TOP);
+    ctx.moveTo(650, RES_GAP_BOTTOM); ctx.lineTo(650, 400);
+    // Bottom wire
+    ctx.moveTo(650, 400); ctx.lineTo(BULB_GAP_RIGHT, 400);
+    ctx.moveTo(BULB_GAP_LEFT, 400); ctx.lineTo(150, 400);
+    // Left wire
+    ctx.moveTo(150, 400); ctx.lineTo(150, SWITCH_GAP_BOTTOM);
+    ctx.moveTo(150, SWITCH_GAP_TOP); ctx.lineTo(150, 100);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Corner dots
+    ctx.fillStyle = '#58a6ff';
+    [CORNER_TL, CORNER_TR, CORNER_BR, CORNER_BL].forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Terminal dots for components
+    ctx.fillStyle = '#8b949e';
+    // Battery terminals
+    ctx.beginPath(); ctx.arc(BAT_GAP_LEFT, BAT_Y, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(BAT_GAP_RIGHT, BAT_Y, 3, 0, Math.PI * 2); ctx.fill();
+    // Switch terminals
+    ctx.beginPath(); ctx.arc(SWITCH_X, SWITCH_GAP_TOP, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(SWITCH_X, SWITCH_GAP_BOTTOM, 3, 0, Math.PI * 2); ctx.fill();
+    // Resistor terminals
+    ctx.beginPath(); ctx.arc(RES_X, RES_GAP_TOP, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(RES_X, RES_GAP_BOTTOM, 3, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function drawBattery() {
+    const cx = (BAT_GAP_LEFT + BAT_GAP_RIGHT) / 2;
+    const cy = BAT_Y;
+
+    // Negative terminal (thin)
+    ctx.strokeStyle = '#f0f6fc';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(cx - 15, cy - 15);
+    ctx.lineTo(cx - 15, cy + 15);
+    ctx.stroke();
+
+    // Positive terminal (thick)
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(cx + 15, cy - 18);
+    ctx.lineTo(cx + 15, cy + 18);
+    ctx.stroke();
+
+    // Labels
+    ctx.font = 'bold 16px "Segoe UI", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = '#ff6b6b';
+    ctx.fillText('+', cx + 32, cy - 4);
+    ctx.fillStyle = '#8b949e';
+    ctx.fillText('−', cx - 32, cy - 4);
+
+    // Battery label
+    ctx.font = '13px "Microsoft YaHei", sans-serif';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#8b949e';
+    ctx.fillText('电池', cx, cy + 24);
+
+    // Voltage value on battery
+    ctx.font = 'bold 14px "Consolas", monospace';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = '#ff6b6b';
+    ctx.fillText(voltage + 'V', cx, cy - 22);
+  }
+
+  function drawSwitch() {
+    const x = SWITCH_X;
+    const yTop = SWITCH_GAP_TOP;
+    const yBot = SWITCH_GAP_BOTTOM;
+
+    // Terminals (small circles already drawn in wires, draw again for visibility)
+    ctx.fillStyle = '#f0f6fc';
+    ctx.beginPath(); ctx.arc(x, yTop, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x, yBot, 5, 0, Math.PI * 2); ctx.fill();
+
+    // Arm
+    ctx.strokeStyle = '#f0f6fc';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    if (switchClosed) {
+      ctx.moveTo(x, yTop);
+      ctx.lineTo(x, yBot);
+    } else {
+      ctx.moveTo(x, yTop);
+      ctx.lineTo(x + 28, yBot - 10);
+    }
+    ctx.stroke();
+    ctx.lineCap = 'butt';
+
+    // Pivot dot
+    ctx.fillStyle = '#f0f6fc';
+    ctx.beginPath(); ctx.arc(x, yTop, 4, 0, Math.PI * 2); ctx.fill();
+
+    // Label
+    ctx.font = '13px "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = '#8b949e';
+    ctx.fillText('开关', x, yTop - 10);
+
+    // Click hint
+    ctx.font = '11px "Microsoft YaHei", sans-serif';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = switchClosed ? '#7ee787' : '#ff7b72';
+    const hint = switchClosed ? '点击断开' : '点击闭合';
+    ctx.fillText(hint, x, yBot + 8);
+  }
+
+  function drawBulb() {
+    const cx = (BULB_GAP_LEFT + BULB_GAP_RIGHT) / 2;
+    const cy = BULB_Y;
+    const R = 26;
+    const brightness = getBulbBrightness();
+    const I = getCurrent();
+
+    // Glow effect
+    if (I > 0 && brightness > 0) {
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 3);
+      glow.addColorStop(0, `rgba(255, 220, 50, ${brightness * 0.6})`);
+      glow.addColorStop(0.4, `rgba(255, 180, 30, ${brightness * 0.2})`);
+      glow.addColorStop(1, 'rgba(255, 180, 30, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(cx - R * 3, cy - R * 3, R * 6, R * 6);
+    }
+
+    // Bulb circle
+    ctx.strokeStyle = brightness > 0 ? '#ffd93d' : '#8b949e';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Filament glow
+    if (I > 0 && brightness > 0) {
+      ctx.fillStyle = `rgba(255, 220, 50, ${brightness * 0.5})`;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // X mark (filament)
+    ctx.strokeStyle = brightness > 0 ? '#fff8dc' : '#484f58';
+    ctx.lineWidth = 2.5;
+    const off = R * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - off, cy - off);
+    ctx.lineTo(cx + off, cy + off);
+    ctx.moveTo(cx + off, cy - off);
+    ctx.lineTo(cx - off, cy + off);
+    ctx.stroke();
+
+    // Label
+    ctx.font = '13px "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#8b949e';
+    ctx.fillText('灯泡', cx, cy + R + 8);
+  }
+
+  function drawResistor() {
+    const x = RES_X;
+    const yTop = RES_GAP_TOP;
+    const yBot = RES_GAP_BOTTOM;
+    const midY = (yTop + yBot) / 2;
+    const segH = (yBot - yTop) / 10; // each zigzag half
+
+    ctx.strokeStyle = '#f0f6fc';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    // Lead-in
+    ctx.moveTo(x, yTop);
+
+    // 5 zigzag segments
+    const zigCount = 5;
+    const totalZigH = yBot - yTop;
+    const halfZig = totalZigH / (zigCount * 2);
+    const zigW = 18;
+
+    for (let i = 0; i < zigCount; i++) {
+      const baseY = yTop + i * halfZig * 2;
+      ctx.lineTo(x + zigW, baseY + halfZig);
+      ctx.lineTo(x - zigW, baseY + halfZig * 2);
+    }
+    // Lead-out
+    ctx.lineTo(x, yBot);
+    ctx.stroke();
+
+    // Label
+    ctx.font = '13px "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#8b949e';
+    ctx.fillText('电阻', x + 28, midY);
+
+    // Resistance value
+    ctx.font = 'bold 14px "Consolas", monospace';
+    ctx.fillStyle = '#ffd93d';
+    ctx.fillText(resistance + 'Ω', x + 28, midY + 18);
+  }
+
+  function drawElectrons(dt) {
+    const I = getCurrent();
+    if (I <= 0 || !switchClosed) return;
+
+    // Speed proportional to current
+    electronSpeed = I * 40;
+
+    // Update electron positions
+    const delta = electronSpeed * dt;
+    for (let i = 0; i < NUM_ELECTRONS; i++) {
+      electronOffsets[i] = (electronOffsets[i] + delta) % totalLength;
+    }
+
+    // Draw electrons
+    for (let i = 0; i < NUM_ELECTRONS; i++) {
+      const pos = getPathPosition(electronOffsets[i]);
+
+      // Electron glow
+      const grad = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 8);
+      grad.addColorStop(0, 'rgba(180, 230, 255, 0.9)');
+      grad.addColorStop(0.4, 'rgba(120, 200, 255, 0.4)');
+      grad.addColorStop(1, 'rgba(120, 200, 255, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Electron core
+      ctx.fillStyle = '#b0e0ff';
+      ctx.shadowColor = 'rgba(100, 200, 255, 0.6)';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  function drawCurrentArrow() {
+    const I = getCurrent();
+    if (I <= 0 || !switchClosed) return;
+
+    // Draw a small arrow indicator showing current direction (clockwise)
+    const arrowPos = 0.3 * totalLength; // on the right side going down
+    const pos = getPathPosition(arrowPos);
+    const nextPos = getPathPosition(arrowPos + 10);
+
+    // Arrow direction
+    const dx = nextPos.x - pos.x;
+    const dy = nextPos.y - pos.y;
+    const angle = Math.atan2(dy, dx);
+
+    ctx.save();
+    ctx.translate(pos.x, pos.y);
+    ctx.rotate(angle);
+
+    ctx.strokeStyle = 'rgba(88, 166, 255, 0.3)';
+    ctx.fillStyle = 'rgba(88, 166, 255, 0.3)';
+    ctx.lineWidth = 1.5;
+
+    // Arrow shaft
+    const arrowLen = 16;
+    ctx.beginPath();
+    ctx.moveTo(-arrowLen/2, 0);
+    ctx.lineTo(arrowLen/2, 0);
+    ctx.stroke();
+
+    // Arrow head
+    ctx.beginPath();
+    ctx.moveTo(arrowLen/2, 0);
+    ctx.lineTo(arrowLen/2 - 7, -5);
+    ctx.lineTo(arrowLen/2 - 7, 5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawFormulaOnCanvas() {
+    // Draw formula in top-right corner of canvas
+    ctx.font = '16px "Consolas", "Courier New", monospace';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = 'rgba(88, 166, 255, 0.5)';
+    ctx.fillText('U = I × R', W - 20, 15);
+
+    // Current state
+    ctx.font = '13px "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = switchClosed ? 'rgba(126, 231, 135, 0.5)' : 'rgba(255, 123, 114, 0.5)';
+    ctx.fillText(switchClosed ? '● 通路' : '○ 断路', 15, 15);
+
+    // Draw real-time values
+    ctx.font = 'bold 14px "Consolas", monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    const I = getCurrent();
+    ctx.fillText(`I = ${I.toFixed(3)} A`, 15, H - 10);
+  }
+
+  // ---- Main draw ----
+  let lastTime = 0;
+
+  function draw(time) {
+    const dt = lastTime ? Math.min((time - lastTime) / 1000, 0.05) : 0.016;
+    lastTime = time;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Subtle grid
+    ctx.strokeStyle = 'rgba(48, 54, 61, 0.3)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x <= W; x += 40) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y <= H; y += 40) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    // Draw current direction arrow
+    drawCurrentArrow();
+
+    // Draw wires
+    drawWires();
+
+    // Draw electrons
+    drawElectrons(dt);
+
+    // Draw components (on top)
+    drawBattery();
+    drawSwitch();
+    drawBulb();
+    drawResistor();
+
+    // Draw formula overlay
+    drawFormulaOnCanvas();
+
+    // Draw clickable switch area indicator (subtle)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.strokeRect(SWITCH_X - 30, SWITCH_GAP_TOP - 15, 60, SWITCH_GAP_BOTTOM - SWITCH_GAP_TOP + 30);
+    ctx.setLineDash([]);
+
+    requestAnimationFrame(draw);
+  }
+
+  // ---- Interactivity ----
+
+  // Sliders
+  voltageSlider.addEventListener('input', function() {
+    voltage = parseFloat(this.value);
+    updateDisplay();
+  });
+
+  resistanceSlider.addEventListener('input', function() {
+    resistance = parseInt(this.value);
+    updateDisplay();
+  });
+
+  function updateDisplay() {
+    const I = getCurrent();
+    voltageDisplay.textContent = voltage.toFixed(1);
+    resistanceDisplay.textContent = resistance;
+    readoutVoltage.textContent = voltage.toFixed(1);
+    readoutResistance.textContent = resistance;
+    readoutCurrent.textContent = I.toFixed(2);
+
+    // Update status badge
+    if (switchClosed) {
+      statusBadge.className = 'status-badge closed';
+      statusIcon.textContent = '●';
+      statusText.textContent = '电路闭合';
+    } else {
+      statusBadge.className = 'status-badge open';
+      statusIcon.textContent = '○';
+      statusText.textContent = '电路断开';
+    }
+  }
+
+  // Click to toggle switch
+  function isInSwitchArea(mx, my) {
+    const left = SWITCH_X - 30;
+    const right = SWITCH_X + 30;
+    const top = SWITCH_GAP_TOP - 15;
+    const bottom = SWITCH_GAP_BOTTOM + 15;
+    return mx >= left && mx <= right && my >= top && my <= bottom;
+  }
+
+  canvas.addEventListener('click', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+
+    if (isInSwitchArea(mx, my)) {
+      switchClosed = !switchClosed;
+      updateDisplay();
+    }
+  });
+
+  // Hover cursor
+  canvas.addEventListener('mousemove', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    canvas.style.cursor = isInSwitchArea(mx, my) ? 'pointer' : 'default';
+  });
+
+  // ---- Init ----
+  updateDisplay();
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
