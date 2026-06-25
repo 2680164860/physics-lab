@@ -590,6 +590,10 @@ canvas#mainCanvas.panning { cursor: grabbing; }
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4"/><rect x="2" y="16" width="20" height="4" rx="1"/></svg>
         <span class="tooltip">传送带</span>
       </button>
+      <button class="tool-btn" id="btn-ideal-contact" title="理想接触模式（无动能损失、无摩擦、无空气阻力）">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
+        <span class="tooltip">理想接触</span>
+      </button>
     </div>
     <div class="toolbar-group">
       <button class="tool-btn" id="btn-manual" title="说明书 / 联系开发者" style="width:auto;padding:0 10px;font-size:12px;">
@@ -622,102 +626,174 @@ canvas#mainCanvas.panning { cursor: grabbing; }
         </div>
 
         <div class="manual-section">
-          <h3>🎮 基本操作</h3>
+          <h3>🎮 基本操作——鼠标篇</h3>
           <table class="manual-table">
-            <tr><td class="key">左键单击</td><td>选择对象（小球/板砖/线段/圆形轨道）</td></tr>
-            <tr><td class="key">左键拖拽</td><td>移动选中的对象</td></tr>
-            <tr><td class="key">滚轮</td><td>缩放画布（以鼠标位置为中心）</td></tr>
-            <tr><td class="key">Shift+左键 / 中键</td><td>平移画布</td></tr>
-            <tr><td class="key">在空白处拖拽</td><td>框选多条线段</td></tr>
-            <tr><td class="key">Ctrl+点击线段</td><td>多选/取消多选线段</td></tr>
-            <tr><td class="key">Delete</td><td>删除选中的对象</td></tr>
+            <tr><td class="key">左键单击</td><td>选择物体（小球、板砖、线段、圆形轨道均可）</td></tr>
+            <tr><td class="key">左键拖拽</td><td>移动选中的物体</td></tr>
+            <tr><td class="key">滚轮</td><td>缩放画布（以鼠标所在位置为中心缩放）</td></tr>
+            <tr><td class="key">Shift+左键 或 中键拖拽</td><td>平移画布视角</td></tr>
+            <tr><td class="key">空白处拖拽</td><td>框选多条线段（拖出矩形选框即可）</td></tr>
+            <tr><td class="key">Ctrl+左键点击线段</td><td>添加/移除某条线段到多选集合中</td></tr>
+            <tr><td class="key">Delete 键</td><td>删除选中的物体、线段或轨道</td></tr>
           </table>
         </div>
 
         <div class="manual-section">
-          <h3>⌨️ 键盘快捷键</h3>
+          <h3>⌨️ 键盘快捷键——不用鼠标也能操作</h3>
           <table class="manual-table">
-            <tr><td class="key">1</td><td>切换为"选择"工具</td></tr>
-            <tr><td class="key">2</td><td>切换为"绘制"工具（自由绘制轨道）</td></tr>
-            <tr><td class="key">3</td><td>切换为"平移"工具</td></tr>
-            <tr><td class="key">Space（空格）</td><td>暂停/继续模拟</td></tr>
-            <tr><td class="key">G</td><td>在画布中央生成一个小球</td></tr>
-            <tr><td class="key">B</td><td>在画布中央生成一块板砖</td></tr>
-            <tr><td class="key">Delete</td><td>删除选中的物体/线段/轨道</td></tr>
+            <tr><td class="key">1</td><td>切换到"选择"工具</td></tr>
+            <tr><td class="key">2</td><td>切换到"绘制"工具（自由手绘轨道）</td></tr>
+            <tr><td class="key">3</td><td>切换到"平移"工具</td></tr>
+            <tr><td class="key">Space（空格键）</td><td>启动/暂停物理模拟（最常用的快捷键！）</td></tr>
+            <tr><td class="key">G</td><td>在画布中央生成一颗小球</td></tr>
+            <tr><td class="key">B</td><td>在画布中央生成一块板砖（矩形）</td></tr>
+            <tr><td class="key">Delete</td><td>删除当前选中的物体/线段/轨道</td></tr>
+          </table>
+          <p style="margin-top:6px;font-size:12px;color:#5a6e8a;">💡 小提示：按 G 键和 B 键是最快的添加物体的方式，比用鼠标点按钮方便得多！</p>
+        </div>
+
+        <div class="manual-section">
+          <h3>🧰 顶部工具栏——每个按钮是做什么的</h3>
+          <table class="manual-table">
+            <tr><td class="key">🖱 选择</td><td>选择、拖拽物体。这是最常用的工具</td></tr>
+            <tr><td class="key">✏️ 绘制轨道</td><td>按住鼠标自由绘制轨道线条，松手后自动平滑优化。适合画曲线轨道</td></tr>
+            <tr><td class="key">✋ 平移</td><td>拖拽平移画布视角。也可以按住 Shift+左键 或 中键 快速平移</td></tr>
+            <tr><td class="key">↩ 撤销</td><td>撤销上一步操作（此功能仍在完善中）</td></tr>
+            <tr><td class="key">🗑 清空</td><td>一键清空场景中所有物体</td></tr>
+            <tr><td class="key">0.5× / 1× / 2×</td><td>模拟速度：0.5倍慢放、1倍正常、2倍快进</td></tr>
+            <tr><td class="key">⊕ 质点模式</td><td>选中小球后点击，小球缩小为原来的1/4，变成"质点"——适合做力学抽象分析（如只考虑受力，不考虑大小）。如果没有选中任何球，则切换"新生成的小球默认是否为质点"</td></tr>
+            <tr><td class="key">⬡ 受力显示</td><td>每点一次切换显示模式：<br>全部力（分力+合力）→ 仅分力 → 仅合力 → 不显示 → 循环</td></tr>
+            <tr><td class="key">➤ 速度箭头</td><td>显示/隐藏速度矢量箭头（箭头方向=运动方向，箭头长度=速度大小）</td></tr>
+            <tr><td class="key">🧲 赋予磁场</td><td>选中一条线段后点击，线段变为橙色——带电粒子经过时会受到洛伦兹力（磁场力），运动方向会偏转。可用于模拟磁场对带电粒子的影响</td></tr>
+            <tr><td class="key">⚡ 赋予电场</td><td>选中一条线段后点击，线段变为绿色——带电粒子经过时会受到电场力。也可用于<strong>给小球带上电荷</strong>：选中小球后点击此按钮，小球就带上了电荷（显示 + 号），之后它经过电场或磁场区域就会受力</td></tr>
+            <tr><td class="key">✕ 清除场/电荷</td><td>选中线段后点击：清除磁场/电场/传送带属性；选中小球后点击：清除小球上的电荷</td></tr>
+            <tr><td class="key">◉ 传送带</td><td>选中线段或圆形轨道后点击，变为紫色传送带——沿着轨道方向推动物体运动</td></tr>
+            <tr><td class="key">⚪ 理想接触</td><td>开启后物体碰撞无动能损失、无摩擦、无空气阻力（弹性碰撞），模拟理想物理环境。再次点击关闭</td></tr>
           </table>
         </div>
 
         <div class="manual-section">
-          <h3>🧰 工具栏按钮说明</h3>
+          <h3>📐 线段编辑——这些操作不容易发现，但很有用</h3>
           <table class="manual-table">
-            <tr><td class="key">🖱 选择</td><td>选择、拖拽对象</td></tr>
-            <tr><td class="key">✏️ 绘制轨道</td><td>自由绘制碰撞轨道（鼠标绘制，松手自动平滑优化）</td></tr>
-            <tr><td class="key">✋ 平移</td><td>平移画布视角</td></tr>
-            <tr><td class="key">↩ 撤销</td><td>撤销（暂未实现完整功能）</td></tr>
-            <tr><td class="key">🗑 清空</td><td>清空场景所有物体</td></tr>
-            <tr><td class="key">0.5× / 1× / 2×</td><td>模拟速度控制</td></tr>
-            <tr><td class="key">⊕ 质点模式</td><td>选中小球时切换为质点（半径缩小为1/4）；无选中时切换默认质点模式</td></tr>
-            <tr><td class="key">⬡ 受力显示</td><td>循环切换：全部分力+合力 → 仅分力 → 仅合力 → 不显示</td></tr>
-            <tr><td class="key">➤ 速度箭头</td><td>显示/隐藏速度矢量箭头</td></tr>
-            <tr><td class="key">🧲 磁场</td><td>选中线段赋予磁场属性（橙色），带电粒子经过时受洛伦兹力</td></tr>
-            <tr><td class="key">⚡ 电场</td><td>选中线段赋予电场属性（绿色），带电粒子经过时受电场力</td></tr>
-            <tr><td class="key">✕ 清除场</td><td>清除线段的场属性，或清除物体的电荷/磁矩</td></tr>
-            <tr><td class="key">◉ 传送带</td><td>选中线段/圆形轨道赋予传送带属性（紫色），沿轨道方向推动物体</td></tr>
-          </table>
-        </div>
-
-        <div class="manual-section">
-          <h3>📐 线段编辑（隐藏操作）</h3>
-          <table class="manual-table">
-            <tr><td class="key">拖拽线段中点</td><td>移动整条线段</td></tr>
-            <tr><td class="key">拖拽线段端点</td><td>调整线段长度和角度（自动吸附附近端点）</td></tr>
-            <tr><td class="key">框选多条线段</td><td>在空白处拖拽框选</td></tr>
-            <tr><td class="key">多选后拖拽</td><td>同时移动多条线段</td></tr>
-            <tr><td class="key">多选右下角方块</td><td>缩放多条线段</td></tr>
-            <tr><td class="key">多选顶部圆圈</td><td>旋转多条线段组</td></tr>
-            <tr><td class="key">Ctrl+点击</td><td>在多选集合中添加/移除线段</td></tr>
+            <tr><td class="key">拖拽线段中间</td><td>移动整条线段位置</td></tr>
+            <tr><td class="key">拖拽线段端点</td><td>改变线段的长度和角度（拖拽时会自动吸附到附近的端点或中点）</td></tr>
+            <tr><td class="key">框选多条线段</td><td>在画布空白处拖拽出一个矩形，框住多条线段即可同时选中它们</td></tr>
+            <tr><td class="key">多选后拖拽</td><td>同时移动多条选中的线段（保持相对位置不变）</td></tr>
+            <tr><td class="key">多选后拖拽右下角方块</td><td>整体缩放选中的多条线段组</td></tr>
+            <tr><td class="key">多选后拖拽顶部圆圈</td><td>整体旋转选中的多条线段组</td></tr>
+            <tr><td class="key">Ctrl+点击</td><td>在多选集合中添加或移除某条线段，灵活组合</td></tr>
           </table>
         </div>
 
         <div class="manual-section">
           <h3>⭕ 圆形轨道编辑</h3>
           <table class="manual-table">
-            <tr><td class="key">拖拽轨道本身</td><td>移动圆形轨道</td></tr>
-            <tr><td class="key">拖拽轨道右侧方块</td><td>调整圆半径</td></tr>
+            <tr><td class="key">拖拽圆形轨道本体</td><td>移动圆形轨道的位置</td></tr>
+            <tr><td class="key">拖拽轨道右侧的小方块</td><td>改变圆的半径大小</td></tr>
           </table>
+          <p style="margin-top:6px;font-size:12px;color:#5a6e8a;">💡 圆形轨道也可以被赋予传送带属性，让小球沿轨道内侧运动。</p>
         </div>
 
         <div class="manual-section">
-          <h3>⚙️ 右侧面板详解</h3>
+          <h3>⚙️ 右侧面板——调节物理世界</h3>
+
+          <h4 style="font-size:13px;color:#22d3ee;margin:8px 0 4px;">🌍 全局物理参数</h4>
           <table class="manual-table">
-            <tr><td class="key">重力 / 摩擦 / 弹力 / 空气阻</td><td>全局物理参数滑块，实时调节</td></tr>
-            <tr><td class="key">大小滑块</td><td>选中物体后调节尺寸（矩形/小球/质点视觉大小）</td></tr>
-            <tr><td class="key">质量输入</td><td>选中物体后编辑质量（kg）</td></tr>
-            <tr><td class="key">▶ 运行 / ⏸ 暂停</td><td>启动/暂停物理模拟</td></tr>
-            <tr><td class="key">↺ 重置</td><td>重置所有物体的速度和轨迹</td></tr>
-            <tr><td class="key">● 小球</td><td>在画布中央生成一个小球</td></tr>
-            <tr><td class="key">▬ 板砖</td><td>在画布中央生成一块矩形板砖</td></tr>
-            <tr><td class="key">暂停编辑（暂停时）</td><td>设置选中物体的初速度、外力（加速度），点击"运行"后生效</td></tr>
-            <tr><td class="key">场参数</td><td>选中场线段/传送带后，调节强度和方向</td></tr>
-            <tr><td class="key">对象属性</td><td>实时显示选中对象的物理属性、位置、速度、受力分析</td></tr>
+            <tr><td class="key">重力滑块</td><td>调节重力大小（0~20，默认9.8）。拉到底就是无重力环境</td></tr>
+            <tr><td class="key">摩擦滑块</td><td>物体与轨道/地面之间的摩擦力大小（0~1）</td></tr>
+            <tr><td class="key">弹力滑块</td><td>物体碰撞后的弹性（0~1）。0是完全非弹性（撞上就粘住），1是弹性碰撞（弹回去）</td></tr>
+            <tr><td class="key">空气阻滑块</td><td>空气阻力大小（0~1），模拟物体在空气中的阻力效果</td></tr>
           </table>
+
+          <h4 style="font-size:13px;color:#22d3ee;margin:8px 0 4px;">📏 选中物体后的参数</h4>
+          <table class="manual-table">
+            <tr><td class="key">大小 / 宽度 / 高度</td><td>选中物体后调节它的视觉尺寸</td></tr>
+            <tr><td class="key">质量</td><td>选中物体后编辑它的质量（单位：千克）。质量越大越难推动</td></tr>
+            <tr><td class="key">转角°</td><td>选中物体后旋转角度（仅板砖有效，小球旋转看不出变化）</td></tr>
+          </table>
+
+          <h4 style="font-size:13px;color:#22d3ee;margin:8px 0 4px;">⏸️ 暂停编辑（模拟暂停时才出现）</h4>
+          <p style="font-size:12px;margin-bottom:6px;">在模拟<strong>暂停</strong>状态下，选中一个物体，可以在右侧设置它的初速度和附加外力。设置好后点击"运行"，这些参数就会生效。</p>
+          <table class="manual-table">
+            <tr><td class="key">速度 + 方向°</td><td>给物体一个初速度（如给小球一个向右的初速度）</td></tr>
+            <tr><td class="key">加速度 + 方向°</td><td>给物体施加一个持续的外力（相当于一个持续的推力/拉力），可用于模拟"额外推力"或"风"等效果</td></tr>
+          </table>
+
+          <h4 style="font-size:13px;color:#22d3ee;margin:8px 0 4px;">🧲 场参数</h4>
+          <p style="font-size:12px;margin-bottom:6px;">选中一条带有磁场/电场/传送带属性的线段后，可以在右侧调节：</p>
+          <table class="manual-table">
+            <tr><td class="key">强度</td><td>场的强弱数值（数值越大，对带电粒子的作用力越大）</td></tr>
+            <tr><td class="key">方向°</td><td>场的方向角度（0°=向右，90°=向下，-90°=向上，等等）</td></tr>
+          </table>
+
+          <h4 style="font-size:13px;color:#22d3ee;margin:8px 0 4px;">▶️ 模拟控制区</h4>
+          <table class="manual-table">
+            <tr><td class="key">▶ 运行 / ⏸ 暂停</td><td>启动或暂停物理模拟。也可以按空格键快速切换</td></tr>
+            <tr><td class="key">↺ 重置</td><td>把物体复位到初始位置，清零速度和运动轨迹。<br><strong>长按这个按钮</strong>可以同时清除保存的存档（下次打开页面时会恢复成空白场景）</td></tr>
+            <tr><td class="key">● 小球</td><td>在画面中央生成一颗小球</td></tr>
+            <tr><td class="key">▬ 板砖</td><td>在画面中央生成一块矩形板砖</td></tr>
+          </table>
+
+          <h4 style="font-size:13px;color:#22d3ee;margin:8px 0 4px;">📊 对象属性</h4>
+          <p style="font-size:12px;">选中任何物体后，这里会实时显示它的详细物理信息，包括：位置坐标、速度大小和方向、质量、电荷量、以及<strong>受力分析</strong>（重力G、支持力N、摩擦力f、电场力F_e、洛伦兹力F_b、外力F_ext、合力F_net）。不选中任何物体时显示"点击选择对象"。</p>
         </div>
 
         <div class="manual-section">
-          <h3>🏗️ 左侧模板</h3>
-          <p>点击左侧模板卡片快速生成常用轨道结构：水平面、斜面、凹槽轨道、圆弧轨道、双斜面(V形)、竖直墙面、组合轨道、圆形轨道、L形轨道。</p>
+          <h3>🏗️ 左侧模板——快速搭建轨道</h3>
+          <p>点击左侧的模板卡片，可以一键生成常用的轨道结构：</p>
+          <ul style="font-size:12px;padding-left:20px;margin-top:4px;">
+            <li><strong>水平面</strong> —— 一条水平线段，最简单的轨道</li>
+            <li><strong>斜面</strong> —— 倾斜的坡道</li>
+            <li><strong>凹槽轨道</strong> —— V形凹槽，小球会在中间来回滚动</li>
+            <li><strong>双斜面(V)</strong> —— 一个大V形轨道</li>
+            <li><strong>竖直墙面</strong> —— 竖直的挡板/墙壁</li>
+            <li><strong>组合轨道</strong> —— 水平 + 斜面组合，模拟复杂场景</li>
+            <li><strong>圆形轨道</strong> —— 圆形边界，小球可以在内部做圆周运动</li>
+            <li><strong>L形轨道</strong> —— L形拐角轨道</li>
+          </ul>
+          <p style="margin-top:6px;font-size:12px;color:#5a6e8a;">💡 左侧面板可以通过中间的小箭头按钮折叠/展开，方便腾出更多画布空间。</p>
+        </div>
+
+        <div class="manual-section">
+          <h3>🌟 进阶玩法——发挥你的创造力</h3>
+          <ul style="font-size:12px;padding-left:20px;">
+            <li><strong>带电粒子在磁场中偏转：</strong>
+              <br>① 按 G 生成一个小球
+              <br>② 选中小球，点击工具栏的 ⚡ 电场按钮（小球显示 + 号，表示带正电）
+              <br>③ 点击左侧模板"水平面"生成一条水平线段
+              <br>④ 选中线段，点击工具栏的 🧲 磁场按钮（线段变橙色）
+              <br>⑤ 在右侧面板可调节磁场强度和方向
+              <br>⑥ 按空格运行，小球经过磁场区域时会发生偏转（洛伦兹力）</li>
+            <br>
+            <li><strong>传送带运球：</strong>
+              <br>① 点击左侧模板"水平面"生成一条线段
+              <br>② 选中线段，点击 ◉ 传送带按钮（线段变紫色）
+              <br>③ 在右侧面板调节传送带的强度（速度）和方向
+              <br>④ 生成一个小球放在传送带上，按空格运行，球就会被传送带推动</li>
+            <br>
+            <li><strong>理想碰撞实验：</strong>
+              <br>① 点击顶部工具栏的 ⚪ 理想接触按钮（按钮亮起）
+              <br>② 生成两个小球，分别用暂停编辑给它们设置不同的初速度
+              <br>③ 按空格运行，观察完全弹性碰撞（无能量损失）</li>
+            <br>
+            <li><strong>自由绘制曲线轨道：</strong>
+              <br>① 按 2 切换到绘制工具（或点击工具栏 ✏️ 按钮）
+              <br>② 在画布上按住鼠标左键自由绘制
+              <br>③ 松手后系统会自动平滑和优化路径，生成可碰撞的曲线轨道</li>
+          </ul>
         </div>
 
         <div class="manual-section">
           <h3>💡 小贴士</h3>
-          <ul>
-            <li>选中小球后，可点击工具栏"⊕质点模式"将其变为质点（适合做力学抽象分析）</li>
-            <li>给小球赋予电荷（选中球 → 点击⚡电场按钮），球就会在电场/磁场中受力</li>
-            <li>画完自由绘制轨道后，系统会自动平滑和简化路径</li>
-            <li>拖拽物体时，端点会自动吸附到附近的线段端点和中点</li>
-            <li>右侧面板的"对象属性"区域实时显示受力分析（重力G、支持力N、摩擦力f、电场力F_e、洛伦兹力F_b、合力F_net）</li>
-            <li>模拟暂停时可以编辑物体的初速度和附加外力，点击运行后生效</li>
-            <li>物体运动时会留下运动轨迹（尾迹），方便观察路径</li>
+          <ul style="font-size:12px;padding-left:20px;">
+            <li>右侧面板可以折叠（暂无折叠按钮，拖动右侧边框即可调整宽度）</li>
+            <li>场景会自动保存到浏览器中——关闭页面再打开，场景依然在。如果想完全重置，<strong>长按 ↺ 重置按钮</strong>可以清除存档</li>
+            <li>物体运动时会留下尾迹（运动轨迹线），方便观察运动路径</li>
+            <li>拖拽物体时，端点会自动吸附到附近线段的端点和中点，方便精确对接</li>
+            <li>选中物体后，右键属性区会实时显示受力分析——每种力用不同颜色表示（绿色=重力、蓝色=支持力、橙色=摩擦力等），合力用红色箭头表示</li>
+            <li>画布左下角会显示"网格: 20px · 缩放: 100%"等信息，方便了解当前画布状态</li>
+            <li>调节重力到0就是"太空模式"（无重力），配合初速度可以模拟惯性运动</li>
+            <li>板砖（矩形）会真实地旋转和翻滚，比小球更有趣但也更难控制</li>
           </ul>
         </div>
       </div>
@@ -771,9 +847,24 @@ canvas#mainCanvas.panning { cursor: grabbing; }
           <span class="val" id="val-ball-size">1.00</span>
           <span style="color:#64748b;font-size:12px">×</span>
         </div>
+        <div class="param-row" id="row-rect-width" style="display:none">
+          <label>宽度</label>
+          <input type="range" id="sl-rect-width" min="3" max="30" value="10" step="0.5">
+          <span class="val" id="val-rect-width">10.0</span>
+        </div>
+        <div class="param-row" id="row-rect-height" style="display:none">
+          <label>高度</label>
+          <input type="range" id="sl-rect-height" min="1" max="20" value="4" step="0.5">
+          <span class="val" id="val-rect-height">4.0</span>
+        </div>
         <div class="param-row" id="row-ball-mass" style="display:none">
           <label>质量</label>
           <input type="text" inputmode="decimal" class="num-inline" id="num-ball-mass" value="1.0">
+        </div>
+        <div class="param-row" id="row-ball-angle" style="display:none">
+          <label>转角°</label>
+          <input type="range" id="sl-ball-angle" min="-180" max="180" value="0" step="1">
+          <span class="val" id="val-ball-angle">0</span>
         </div>
       </div>
       <div class="param-group" id="field-controls" style="display:none">
@@ -882,6 +973,9 @@ class RigidBody {
     this.inContact = false;
     this.normalForceMag = 0;
     this.frictionForceMag = 0;
+    // 初始位置/角度（用于重置）
+    this._initPos = this.pos.clone();
+    this._initAngle = this.angle;
   }
 
   get invMass() { return this.isStatic ? 0 : 1 / this.mass; }
@@ -957,9 +1051,10 @@ class RigidBody {
           this.pos.x + cx * cos2 - cy * sin2,
           this.pos.y + cx * sin2 + cy * cos2
         );
-        contactDist = this.pos.distTo(contactPoint);
+        // Use segment-to-center distance for threshold (same as circle),
+        // contactPoint is only for force visualization.
       }
-      if (contactDist < this.effectiveRadius + 0.5) {
+      if (dist < this.effectiveRadius + 0.5) {
         let normal = this.pos.sub(cp.point);
         if (normal.lenSq() < 0.0001) {
           normal = seg.normal.lenSq() > 0 ? seg.normal.clone() : new Vec2(0, -1);
@@ -1131,6 +1226,8 @@ class PhysicsEngine {
     this.accumulator = 0;
     // Collision warm-up iterations (improves stacking stability)
     this.collisionIterations = 2;
+    // Ideal contact mode: no friction, perfect elasticity, no air drag
+    this.idealContactMode = false;
     // Collision events for rendering (removed)
   }
 
@@ -1231,7 +1328,7 @@ class PhysicsEngine {
       // 角速度积分（仅矩形需要旋转）
       if (b.type === 'rect') {
         b.angle += b.angVel * dt;
-        b.angVel *= 0.98; // 角速度阻尼，防止无限旋转
+        b.angVel *= Math.max(0, 1 - 8 * dt); // 粘滞阻尼（~8/s 衰减系数），与帧率无关
       }
       b.acc.x = 0;
       b.acc.y = 0;
@@ -1239,7 +1336,8 @@ class PhysicsEngine {
 
     // --- 3. Collision detection & response (multiple passes for stability) ---
     for (let iter = 0; iter < this.collisionIterations; iter++) {
-      for (const b of this.bodies) {
+      for (let i = 0; i < this.bodies.length; i++) {
+        const b = this.bodies[i];
         if (b.isStatic || !b.active) continue;
 
         const isRect = b.type === 'rect';
@@ -1247,6 +1345,8 @@ class PhysicsEngine {
         // vs Segments
         for (const seg of this.segments) {
           if (seg.fieldType === 'magnetic' || seg.fieldType === 'electric') continue;
+          // 理想模式下矩形不参与线段碰撞检测，由轨道约束通道独立处理
+          if (isRect && this.idealContactMode) continue;
           if (isRect) this._resolveRectSegment(b, seg, dt);
           else this._resolveCircleSegment(b, seg, dt);
         }
@@ -1257,19 +1357,133 @@ class PhysicsEngine {
           else this._resolveCircleBoundary(b, c);
         }
 
-        // vs Body (body to body)
-        for (const other of this.bodies) {
-          if (other === b || other.isStatic) continue;
+        // vs Body (body to body) — only process each pair once
+        for (let j = i + 1; j < this.bodies.length; j++) {
+          const other = this.bodies[j];
+          if (other.isStatic) continue;
           const otherRect = other.type === 'rect';
           if (isRect && otherRect) this._resolveRectRect(b, other);
-          else if (isRect) this._resolveRectCircle(b, other); // b=rect, other=circle
-          else if (otherRect) this._resolveRectCircle(other, b); // other=rect, b=circle
+          else if (isRect) this._resolveRectCircle(b, other);
+          else if (otherRect) this._resolveRectCircle(other, b);
           else this._resolveBodyBody(b, other);
         }
       }
     }
 
-    // --- 4. Boundary clamp ---
+    // --- 4. 轨道约束通道（仅理想模式）：矩形每帧贴合最近轨道段，不依赖碰撞检测 ---
+    if (this.idealContactMode) {
+      for (const b of this.bodies) {
+        if (b.isStatic || !b.active || b.type !== 'rect') continue;
+
+        // 找到最近的物理轨道段
+        let bestSeg = null, bestDist = Infinity, bestCp = null;
+        for (const seg of this.segments) {
+          if (seg.fieldType === 'magnetic' || seg.fieldType === 'electric') continue;
+          const cp = seg.closestPoint(b.pos);
+          const d = b.pos.distTo(cp.point);
+          if (d < bestDist) { bestDist = d; bestSeg = seg; bestCp = cp; }
+        }
+
+        const threshold = Math.hypot(b.width, b.height) * 1.5;
+        if (!bestSeg || bestDist > threshold) continue;
+
+        // === 接缝处理：当最近点在轨道段端点附近时，寻找相邻段 ===
+        let useSeg = bestSeg;
+        let useCp = bestCp;
+        let shouldBounce = false;
+        if (bestCp.t <= 0.05 || bestCp.t >= 0.95) {
+          let bestT = bestCp.t;
+          for (const seg of this.segments) {
+            if (seg === bestSeg) continue;
+            if (seg.fieldType === 'magnetic' || seg.fieldType === 'electric') continue;
+            const cp = seg.closestPoint(b.pos);
+            const d = b.pos.distTo(cp.point);
+            if (d < threshold) {
+              // 检查夹角：若相邻段与当前段夹角 > 80°，视为墙壁反弹
+              const dir1 = bestSeg.p2.sub(bestSeg.p1).normalize();
+              const dir2 = seg.p2.sub(seg.p1).normalize();
+              const angle = Math.acos(Math.max(-1, Math.min(1, dir1.dot(dir2))));
+              if (angle > 1.396) { // 80° ≈ 1.396 rad
+                shouldBounce = true;
+                continue;
+              }
+              // 正常过渡：需要显著更居中（居中性差值 > 0.1）避免低速振荡
+              const centerDist = Math.abs(cp.t - 0.5);
+              const curCenterDist = Math.abs(bestT - 0.5);
+              if (centerDist < curCenterDist - 0.1) {
+                bestT = cp.t;
+                useSeg = seg;
+                useCp = cp;
+              }
+            }
+          }
+        }
+
+        // === 墙壁反弹：在端点处遇到锐角相邻段时反射速度 ===
+        if (shouldBounce && useSeg === bestSeg) {
+          const _segDir = bestSeg.p2.sub(bestSeg.p1);
+          if (_segDir.lenSq() > 0.001) {
+            const wallN = _segDir.normalize();
+            if (bestCp.t >= 0.95) { wallN.x = -wallN.x; wallN.y = -wallN.y; }
+            const dot = b.vel.dot(wallN);
+            if (dot < 0) {
+              b.vel.x -= 2 * dot * wallN.x;
+              b.vel.y -= 2 * dot * wallN.y;
+            }
+          }
+        }
+
+        const seg = useSeg;
+        const cp = useCp;
+
+        // 判断法线方向：先设角度，再用矩形几何确定接触边的朝外法线
+        // 完全不依赖 body.pos，避免每帧位置变化导致法线翻转
+        const segDir = seg.p2.sub(seg.p1);
+        if (segDir.lenSq() < 0.001) continue;
+
+        // ---- 角度约束：矩形底边始终平行于轨道方向（设角度后才计算边） ----
+        b.angle = segDir.angle();
+        b.angVel = 0;
+
+        // 找矩形中离轨道最近的边（即接触边），其朝外法线即为稳定法线方向
+        const edges = b.getEdges();
+        let bestEdge = null, bestEdgeDist = Infinity;
+        for (const edge of edges) {
+          const mid = edge[0].add(edge[1]).scale(0.5);
+          const cp2 = seg.closestPoint(mid);
+          const d = mid.distTo(cp2.point);
+          if (d < bestEdgeDist) { bestEdgeDist = d; bestEdge = edge; }
+        }
+
+        if (!bestEdge) continue;
+        const edgeDir = bestEdge[1].sub(bestEdge[0]);
+        if (edgeDir.lenSq() < 0.001) continue;
+        let _normal = edgeDir.perp().normalize();
+        // 确保朝外：从边指向矩形中心
+        const edgeMid = bestEdge[0].add(bestEdge[1]).scale(0.5);
+        if (_normal.dot(b.pos.sub(edgeMid)) < 0) {
+          _normal.x = -_normal.x;
+          _normal.y = -_normal.y;
+        }
+
+        // ---- 位置约束：将接触边中点投影到轨道表面 ----
+        const proj = seg.closestPoint(edgeMid);
+        const toSurface = proj.point.sub(edgeMid);
+        b.pos = b.pos.add(toSurface);
+
+        // ---- 速度约束：仅保留切向分量，但保持速率大小不变 ----
+        // 用 b.vel.len() 代替投影，避免转弯时切向分量丢失导致减速
+        const _tangent = new Vec2(-_normal.y, _normal.x);
+        const vt = b.vel.len() * Math.sign(b.vel.dot(_tangent));
+        const friction = (b.friction + seg.friction) / 2;
+        const frictionDecel = Math.abs(_normal.dot(b.vel)) * friction;
+        const newVt = Math.abs(vt) < frictionDecel ? 0 : vt - Math.sign(vt) * frictionDecel;
+        b.vel.x = newVt * _tangent.x;
+        b.vel.y = newVt * _tangent.y;
+      }
+    }
+
+    // --- 5. Boundary clamp ---
     // Removed: let bodies fall off screen freely
   }
 
@@ -1307,8 +1521,8 @@ class PhysicsEngine {
         if (Math.abs(vt) < frictionImpulse) newVt = 0;
         else newVt -= Math.sign(vt) * frictionImpulse;
 
-        // 静止接触：趋近速度极小时直接停稳
-        if (vn > -0.5) {
+        // 静止接触：趋近速度极小时直接停稳（理想模式下始终停稳）
+        if (vn > -0.5 || this.idealContactMode) {
           body.vel.x = newVt * tangent.x;
           body.vel.y = newVt * tangent.y;
         } else {
@@ -1440,7 +1654,7 @@ class PhysicsEngine {
 
   // 检查两个投影区间是否重叠，返回重叠量
   _overlap(a, b) {
-    return a.max > b.min && b.max > a.min;
+    return a.max >= b.min && b.max >= a.min;
   }
 
   // ---- Rect vs Segment ----
@@ -1470,22 +1684,52 @@ class PhysicsEngine {
       }
     }
 
-    // 有碰撞，用最近点求法线
-    const cp = this._closestPointOnRect(body, seg.closestPoint(body.pos).point);
-    let normal = body.pos.sub(cp);
-    if (normal.lenSq() < 0.0001) normal = seg.normal.clone();
-    else normal = normal.normalize();
+    // 法线：使用线段法线，指向物体方向
+    let normal = seg.normal.clone();
+    const toBody = body.pos.sub(seg.p1.add(seg.p2).scale(0.5));
+    if (normal.dot(toBody) < 0) normal = normal.scale(-1);
 
-    // 确保法线指向矩形外
-    if (normal.dot(body.pos.sub(cp)) < 0) normal = normal.scale(-1);
+    // === 构建接触点集（最多2个）：优先检测整边接触 ===
+    const contactPoints = [];
+    const edges = body.getEdges();
+    let foundEdgeContact = false;
 
-    const penetration = minOverlap;
+    // 依次检查每条边是否与线段大面积接触
+    for (const edge of edges) {
+      const eDir = edge[1].sub(edge[0]);
+      if (eDir.lenSq() < 0.001) continue;
+      const eNormal = eDir.perp().normalize();
+      // 边的外法线应与线段法线大致相反（边朝向接触面）
+      if (eNormal.dot(normal) < -0.9) {
+        const d1 = seg.distToPoint(edge[0]);
+        const d2 = seg.distToPoint(edge[1]);
+        const threshold = Math.min(body.width, body.height) * 0.4;
+        if (d1.dist < threshold && d2.dist < threshold) {
+          foundEdgeContact = true;
+          contactPoints.push(edge[0]);
+          contactPoints.push(edge[1]);
+          break;
+        }
+      }
+    }
+    if (!foundEdgeContact) {
+      // 降级为单点接触（最近点）
+      const closestSegPt = seg.closestPoint(body.pos).point;
+      const cp = this._closestPointOnRect(body, closestSegPt);
+      contactPoints.push(cp);
+    }
+
+    // === 位置修正 ===
+    const penetration = Math.max(minOverlap, 0.01);
     body.pos = body.pos.add(normal.scale(penetration));
 
+    // === 速度修正与力矩 ===
     const vn = body.vel.dot(normal);
     if (vn < 0) {
       const tangent = new Vec2(-normal.y, normal.x);
       const vt = body.vel.dot(tangent);
+
+      // 普通模式碰撞处理（理想模式已在上面直接返回）
       const restitution = (body.restitution + seg.restitution) / 2;
       const friction = (body.friction + seg.friction) / 2;
       const frictionImpulse = Math.abs(vn) * friction;
@@ -1494,18 +1738,40 @@ class PhysicsEngine {
       else newVt -= Math.sign(vt) * frictionImpulse;
 
       const oldVx = body.vel.x, oldVy = body.vel.y;
-      // 静止接触：趋近速度极小时直接停稳，防止微小抖动
-      if (vn > -0.5) {
+      const isSettling = vn > -0.5;
+
+      if (isSettling) {
         body.vel.x = newVt * tangent.x;
         body.vel.y = newVt * tangent.y;
       } else {
         body.vel.x = -vn * restitution * normal.x + newVt * tangent.x;
         body.vel.y = -vn * restitution * normal.y + newVt * tangent.y;
       }
-      // 碰撞冲量产生的力矩（接触点偏移质心 → 旋转）
+
+      // 碰撞冲量力矩
       const dVx = body.vel.x - oldVx, dVy = body.vel.y - oldVy;
-      const rX = cp.x - body.pos.x, rY = cp.y - body.pos.y;
-      body.angVel += (rX * dVy - rY * dVx) * body.mass / body.inertia;
+      for (const cp of contactPoints) {
+        const rX = cp.x - body.pos.x, rY = cp.y - body.pos.y;
+        const weight = 1 / contactPoints.length;
+        body.angVel += (rX * dVy * weight - rY * dVx * weight) * body.mass / body.inertia;
+      }
+
+      // PD 角度恢复控制器（阈值 -0.5 支持最陡 ~60° 的斜面）
+      const bottomEdge = edges.find(e => {
+        const d = e[1].sub(e[0]);
+        return d.lenSq() > 0.001 && d.perp().normalize().dot(normal) < -0.5;
+      });
+      if (bottomEdge) {
+        const edgeAngle = bottomEdge[1].sub(bottomEdge[0]).angle();
+        const segAngle = seg.p2.sub(seg.p1).angle();
+        let angleDiff = edgeAngle - segAngle;
+        while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+        while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+        const kp = Math.max(200, Math.min(2000, 800 + Math.abs(angleDiff) * 3000));
+        const kd = 30 + Math.abs(angleDiff) * 80;
+        const restoreTorque = -(kp * angleDiff + kd * body.angVel);
+        body.angVel += restoreTorque * dt;
+      }
     }
 
     // 传送带效果：接触时沿切线方向推动物体
@@ -1517,45 +1783,50 @@ class PhysicsEngine {
       const beltOldVx = body.vel.x, beltOldVy = body.vel.y;
       body.vel.x = curVn * normal.x + beltVt * tangent.x;
       body.vel.y = curVn * normal.y + beltVt * tangent.y;
-      // 传送带切线推力产生的力矩
+      // 传送带切线推力产生的力矩（均分到各接触点）
       const beltDVx = body.vel.x - beltOldVx, beltDVy = body.vel.y - beltOldVy;
-      const rBX = cp.x - body.pos.x, rBY = cp.y - body.pos.y;
-      body.angVel += (rBX * beltDVy - rBY * beltDVx) * body.mass / body.inertia;
+      for (const cp of contactPoints) {
+        const rBX = cp.x - body.pos.x, rBY = cp.y - body.pos.y;
+        const beltWeight = 1 / contactPoints.length;
+        body.angVel += (rBX * beltDVy * beltWeight - rBY * beltDVx * beltWeight) * body.mass / body.inertia;
+      }
     }
   }
 
   // ---- Rect vs Circular Boundary ----
   _resolveRectBoundary(body, circ) {
-    const cp = this._closestPointOnRect(body, circ.center);
-    const d = cp.distTo(circ.center);
-    const minDist = body.effectiveRadius;
-    if (d < minDist && d > 0) {
-      const normal = cp.sub(circ.center).normalize();
-      const penetration = minDist - d;
-      body.pos = body.pos.add(normal.scale(penetration));
-      const vn = body.vel.dot(normal);
-      if (vn < 0) {
-        const tangent = new Vec2(-normal.y, normal.x);
-        const vt = body.vel.dot(tangent);
-        const restitution = (body.restitution + circ.restitution) / 2;
-        const friction = (body.friction + circ.friction) / 2;
-        const frictionImpulse = Math.abs(vn) * friction;
-        let newVt = vt;
-        if (Math.abs(vt) < frictionImpulse) newVt = 0;
-        else newVt -= Math.sign(vt) * frictionImpulse;
-        const oldVx = body.vel.x, oldVy = body.vel.y;
-        // 静止接触：趋近速度极小时直接停稳
-        if (vn > -0.5) {
-          body.vel.x = newVt * tangent.x;
-          body.vel.y = newVt * tangent.y;
-        } else {
-          body.vel.x = -vn * restitution * normal.x + newVt * tangent.x;
-          body.vel.y = -vn * restitution * normal.y + newVt * tangent.y;
+    const d = body.pos.distTo(circ.center);
+    const isInside = d < circ.radius;
+    if (isInside) {
+      const innerDist = circ.radius - d;
+      if (innerDist < body.effectiveRadius && d > 0.01) {
+        const normal = body.pos.sub(circ.center).normalize();
+        const penetration = body.effectiveRadius - innerDist;
+        body.pos = body.pos.sub(normal.scale(penetration));
+
+        const vn = body.vel.dot(normal);
+        if (vn < 0) {
+          const tangent = new Vec2(-normal.y, normal.x);
+          const vt = body.vel.dot(tangent);
+          const restitution = (body.restitution + circ.restitution) / 2;
+          const friction = (body.friction + circ.friction) / 2;
+          const frictionImpulse = Math.abs(vn) * friction;
+          let newVt = vt;
+          if (Math.abs(vt) < frictionImpulse) newVt = 0;
+          else newVt -= Math.sign(vt) * frictionImpulse;
+          const oldVx = body.vel.x, oldVy = body.vel.y;
+          if (vn > -0.5 || this.idealContactMode) {
+            body.vel.x = newVt * tangent.x;
+            body.vel.y = newVt * tangent.y;
+          } else {
+            body.vel.x = -vn * restitution * normal.x + newVt * tangent.x;
+            body.vel.y = -vn * restitution * normal.y + newVt * tangent.y;
+          }
+          const dVx = body.vel.x - oldVx, dVy = body.vel.y - oldVy;
+          const cp = this._closestPointOnRect(body, circ.center);
+          const rX = cp.x - body.pos.x, rY = cp.y - body.pos.y;
+          body.angVel += (rX * dVy - rY * dVx) * body.mass / body.inertia;
         }
-        // 碰撞冲量力矩
-        const dVx = body.vel.x - oldVx, dVy = body.vel.y - oldVy;
-        const rX = cp.x - body.pos.x, rY = cp.y - body.pos.y;
-        body.angVel += (rX * dVy - rY * dVx) * body.mass / body.inertia;
       }
     }
   }
@@ -1782,23 +2053,6 @@ const TEMPLATES = [
     ]
   },
   {
-    name: '圆弧轨道',
-    icon: '⌒',
-    segments: (cx, cy) => {
-      const pts = [];
-      for (let i = 0; i <= 12; i++) {
-        const a = Math.PI/2 + (Math.PI/2) * i / 12;
-        pts.push({
-          x1: i > 0 ? cx + 17 * Math.cos(a + Math.PI/4) : undefined,
-          y1: i > 0 ? cy + 17 * Math.sin(a + Math.PI/4) : undefined,
-          x2: cx + 17 * Math.cos(a + Math.PI/4),
-          y2: cy + 17 * Math.sin(a + Math.PI/4)
-        });
-      }
-      return pts.filter(p => p.x1 !== undefined).map(p => ({ x1: p.x1, y1: p.y1, x2: p.x2, y2: p.y2 }));
-    }
-  },
-  {
     name: '双斜面(V)',
     icon: 'V',
     segments: (cx, cy) => [
@@ -1880,24 +2134,6 @@ class SnappingSystem {
     }
     this.activeSnap = closest;
     return closest;
-  }
-
-  drawSnapIndicator(ctx, camera) {
-    if (!this.activeSnap) return;
-    const sp = this.activeSnap;
-    const s = camera.worldToScreen(sp.x, sp.y);
-    const pulse = 0.5 + 0.5 * Math.sin(Date.now() / 300);
-
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, 6 + pulse * 4, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(34, 211, 238, ${0.3 + pulse * 0.4})`;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(34, 211, 238, ${0.5 + pulse * 0.5})`;
-    ctx.fill();
   }
 }
 
@@ -1988,6 +2224,7 @@ const App = {
   // Display toggles
   forceDisplayMode: 'all',  // 'off' | 'components' | 'net' | 'all'
   showVelocityArrow: true,
+  idealContactMode: false,
 
   // Segment editing state
   segDragType: null,  // null | 'segment' | 'endpoint1' | 'endpoint2' | 'multiselect' | 'multiscale' | 'multirotate'
@@ -2005,6 +2242,9 @@ const App = {
   drawPoints: [],
   drawStart: null,
   isDrawing: false,
+
+  // Rect resize state
+  rectResizeStart: null,  // { handle: 'right'|'bottom', initMouse: Vec2, initWidth: number, initHeight: number }
 
   // Box select state
   isBoxSelecting: false,
@@ -2036,6 +2276,12 @@ const App = {
     this._setupControls();
     this._setupEvents();
     this._startLoop();
+    this._updateInfo();
+
+    // Auto-restore saved state
+    if (!this._loadState()) {
+      this._scheduleSave(); // save empty state as baseline
+    }
   },
 
   _setupCanvas() {
@@ -2049,7 +2295,10 @@ const App = {
       this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       this.camera.resize(rect.width, rect.height);
     };
-    window.addEventListener('resize', resize);
+    if (!this._resizeHandler) {
+      this._resizeHandler = resize;
+      window.addEventListener('resize', this._resizeHandler);
+    }
     resize();
   },
 
@@ -2078,23 +2327,22 @@ const App = {
     document.getElementById('btn-clear').addEventListener('click', () => {
       if (!confirm('确定清空所有内容？')) return;
       this.physics.clearAll();
-      this.selectedBody = null;
-      this.selectedSegment = null;
-      this.selectedCircle = null;
-      this.selectedSegments = [];
-      this._updateInspector();
+      this._clearSelection();
       this.snapper.rebuild(this.physics.segments, this.physics.circles);
+      this._scheduleSave();
     });
 
     // Undo button (placeholder - would need full history)
     // Add ball
     document.getElementById('btn-add-ball').addEventListener('click', () => {
       this._addBallAtCenter();
+      this._scheduleSave();
     });
 
     // Add brick
     document.getElementById('btn-add-brick').addEventListener('click', () => {
       this._addBrickAtCenter();
+      this._scheduleSave();
     });
 
     // Particle mode toggle
@@ -2215,6 +2463,11 @@ const App = {
     document.getElementById('btn-electric').addEventListener('click', () => assignField('electric'));
     document.getElementById('btn-clear-field').addEventListener('click', () => assignField('clear'));
     document.getElementById('btn-conveyor').addEventListener('click', () => assignField('conveyor'));
+    document.getElementById('btn-ideal-contact').addEventListener('click', () => {
+      this.idealContactMode = !this.idealContactMode;
+      this.physics.idealContactMode = this.idealContactMode;
+      document.getElementById('btn-ideal-contact').classList.toggle('active', this.idealContactMode);
+    });
   },
 
   _setupTemplates() {
@@ -2271,7 +2524,7 @@ const App = {
 
   _placeTemplate(idx) {
     const tmpl = TEMPLATES[idx];
-    const viewCenter = { x: 0, y: 0 };
+    const viewCenter = { x: -this.camera.x, y: -this.camera.y };
 
     if (tmpl.isCircle) {
       const c = tmpl.circle(0, 0);
@@ -2289,6 +2542,7 @@ const App = {
       }
     }
     this.snapper.rebuild(this.physics.segments, this.physics.circles);
+    this._scheduleSave();
   },
 
   _addBallAtCenter(p) {
@@ -2327,7 +2581,6 @@ const App = {
       color: `hsl(${30 + Math.random() * 20}, 50%, 40%)`,
       label: '板砖' + (this.physics.bodies.filter(b => b.type === 'rect').length + 1)
     });
-    body._defaultRadius = body.radius;
     body._defaultWidth = body.width;
     body._defaultHeight = body.height;
     body.visualScale = 1.0;
@@ -2343,6 +2596,7 @@ const App = {
       valGravity.textContent = v.toFixed(1);
       this.physics.gravity = new Vec2(0, v);
     });
+    slGravity.addEventListener('change', () => this._scheduleSave());
 
     // Friction
     const slFriction = document.getElementById('sl-friction');
@@ -2393,11 +2647,49 @@ const App = {
 
     // Mass (affects selected body)
     const numMass = document.getElementById('num-ball-mass');
-    numMass.addEventListener('change', () => {
+    const applyMass = () => {
       const v = parseFloat(numMass.value);
       if (!isNaN(v) && v > 0) {
         const target = this.selectedBody;
         if (target) target.mass = v;
+      }
+    };
+    numMass.addEventListener('change', applyMass);
+    numMass.addEventListener('input', applyMass);
+
+    // Rotation angle slider (affects selected body)
+    const slAngle = document.getElementById('sl-ball-angle');
+    const valAngle = document.getElementById('val-ball-angle');
+    slAngle.addEventListener('input', () => {
+      const deg = parseFloat(slAngle.value);
+      valAngle.textContent = deg.toFixed(0);
+      const target = this.selectedBody;
+      if (target) target.angle = deg * Math.PI / 180;
+    });
+
+    // Rect width slider (affects selected rect body)
+    const slRectW = document.getElementById('sl-rect-width');
+    const valRectW = document.getElementById('val-rect-width');
+    slRectW.addEventListener('input', () => {
+      const w = parseFloat(slRectW.value);
+      valRectW.textContent = w.toFixed(1);
+      const target = this.selectedBody;
+      if (target && target.type === 'rect') {
+        target.width = w;
+        target._defaultWidth = w;
+      }
+    });
+
+    // Rect height slider (affects selected rect body)
+    const slRectH = document.getElementById('sl-rect-height');
+    const valRectH = document.getElementById('val-rect-height');
+    slRectH.addEventListener('input', () => {
+      const h = parseFloat(slRectH.value);
+      valRectH.textContent = h.toFixed(1);
+      const target = this.selectedBody;
+      if (target && target.type === 'rect') {
+        target.height = h;
+        target._defaultHeight = h;
       }
     });
 
@@ -2422,22 +2714,67 @@ const App = {
       btnPlay.className = this.isPlaying ? 'playing' : '';
     });
 
-    // Reset
-    document.getElementById('btn-reset-sim').addEventListener('click', () => {
-      this.isPlaying = false;
-      this.physics.running = false;
-      document.getElementById('btn-play').textContent = '▶ 运行';
-      document.getElementById('btn-play').className = '';
-      for (const b of this.physics.bodies) {
-        b.vel.x = 0;
-        b.vel.y = 0;
-        b.angVel = 0;
-        b.trail = [];
-        b.active = true;
-        b._hasPauseForce = false;
-      }
-      this.physics.time = 0;
-    });
+    // Reset (short-press = reset positions; long-press = also clear saved state)
+    (() => {
+      const resetBtn = document.getElementById('btn-reset-sim');
+      let pressTimer = null;
+      let didLongPress = false;
+
+      const doReset = (clearSave) => {
+        this.isPlaying = false;
+        this.physics.running = false;
+        document.getElementById('btn-play').textContent = '▶ 运行';
+        document.getElementById('btn-play').className = '';
+        for (const b of this.physics.bodies) {
+          b.vel.x = 0;
+          b.vel.y = 0;
+          b.angVel = 0;
+          b.trail = [];
+          b.active = true;
+          b._hasPauseForce = false;
+          b.pos = b._initPos.clone();
+          b.angle = b._initAngle;
+        }
+        // 同时清零暂停编辑区的输入值，避免再次运行时误用旧值
+        document.getElementById('num-pause-vel').value = '0.0';
+        document.getElementById('num-pause-vel-angle').value = '0';
+        document.getElementById('num-pause-force').value = '0.0';
+        document.getElementById('num-pause-force-angle').value = '0';
+        this._clearSelection();
+        this.physics.time = 0;
+        this.physics.accumulator = 0;
+        this.lastTime = 0;
+        if (clearSave) {
+          this._clearSave();
+          // 显示短暂的提示
+          const tip = document.createElement('div');
+          tip.textContent = '存档已清除';
+          tip.style.cssText = 'position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:8px 20px;border-radius:6px;z-index:999;font-size:14px;pointer-events:none;';
+          document.body.appendChild(tip);
+          setTimeout(() => tip.remove(), 1500);
+        }
+      };
+
+      resetBtn.addEventListener('mousedown', () => {
+        didLongPress = false;
+        pressTimer = setTimeout(() => {
+          didLongPress = true;
+          doReset(true);
+        }, 1200);
+      });
+
+      // mouseup 上触发短按重置（仅在按钮内释放）
+      resetBtn.addEventListener('mouseup', () => {
+        if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+        if (!didLongPress) {
+          doReset(false);
+        }
+      });
+      // mouseleave 仅取消长按定时器，绝不触发重置
+      resetBtn.addEventListener('mouseleave', () => {
+        if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+      });
+    })();
 
     // Field strength/angle controls (text inputs, no min/max clamp)
     const numStrength = document.getElementById('num-field-strength');
@@ -2454,25 +2791,7 @@ const App = {
     numStrength.addEventListener('change', updateField);
     numAngle.addEventListener('change', updateField);
 
-    // Pause editor — input change handlers (no range sliders, no min/max clamp)
-    document.getElementById('num-pause-vel').addEventListener('change', function() {
-      const v = parseFloat(this.value);
-      if (!isNaN(v)) this.value = v;
-    });
-    document.getElementById('num-pause-vel-angle').addEventListener('change', function() {
-      const v = parseFloat(this.value);
-      if (!isNaN(v)) this.value = v;
-    });
-    document.getElementById('num-pause-force').addEventListener('change', function() {
-      const v = parseFloat(this.value);
-      if (!isNaN(v)) this.value = v;
-    });
-    document.getElementById('num-pause-force-angle').addEventListener('change', function() {
-      const v = parseFloat(this.value);
-      if (!isNaN(v)) this.value = v;
-    });
-
-    // Manual modal
+    // Modal manual
     const modal = document.getElementById('manual-modal');
     const btnManual = document.getElementById('btn-manual');
     const btnClose = document.getElementById('btn-manual-close');
@@ -2546,6 +2865,28 @@ const App = {
           if (d2 < selRadius) {
             this.segDragType = 'endpoint2';
             this.segDragTarget = this.selectedSegment;
+            this.isDragging = true;
+            return;
+          }
+        }
+
+        // 1.5) Try rect resize handles (only when paused)
+        if (!this.isPlaying && this.selectedBody && this.selectedBody.type === 'rect') {
+          const b = this.selectedBody;
+          const cos = Math.cos(b.angle), sin = Math.sin(b.angle);
+          const hw = b.width / 2, hh = b.height / 2;
+          // Right handle
+          const rH = new Vec2(b.pos.x + hw * cos, b.pos.y + hw * sin);
+          // Bottom handle
+          const bH = new Vec2(b.pos.x - hh * sin, b.pos.y + hh * cos);
+          const hSel = this.camera.screenDistToWorld(12);
+          if (wp.distTo(rH) < hSel) {
+            this.rectResizeStart = { handle: 'right', initMouse: wp.clone(), initWidth: b.width, initHeight: b.height };
+            this.isDragging = true;
+            return;
+          }
+          if (wp.distTo(bH) < hSel) {
+            this.rectResizeStart = { handle: 'bottom', initMouse: wp.clone(), initWidth: b.width, initHeight: b.height };
             this.isDragging = true;
             return;
           }
@@ -2777,17 +3118,30 @@ const App = {
         return;
       }
 
-      // Body drag
-      if (this.isDragging && this.selectedBody) {
-        let newPos = wp.add(this.dragOffset);
-        const snap = this.snapper.findSnap(newPos, this.selectedBody.pos);
-        if (snap) {
-          newPos = new Vec2(snap.x, snap.y);
-          this.selectedBody.isStatic = true;
-        } else {
-          this.selectedBody.isStatic = false;
+      // Rect resize drag
+      if (this.isDragging && this.rectResizeStart && this.selectedBody && this.selectedBody.type === 'rect') {
+        const b = this.selectedBody;
+        const cos = Math.cos(b.angle), sin = Math.sin(b.angle);
+        // Transform mouse world pos to rect local space
+        const dx = wp.x - b.pos.x, dy = wp.y - b.pos.y;
+        const localX = dx * cos + dy * sin;
+        const localY = -dx * sin + dy * cos;
+        if (this.rectResizeStart.handle === 'right') {
+          const newWidth = Math.max(3, Math.abs(localX) * 2);
+          b.width = newWidth;
+          b._defaultWidth = newWidth;
+        } else if (this.rectResizeStart.handle === 'bottom') {
+          const newHeight = Math.max(1, Math.abs(localY) * 2);
+          b.height = newHeight;
+          b._defaultHeight = newHeight;
         }
-        this.selectedBody.pos = newPos;
+        this._updateInspector(b);
+        return;
+      }
+
+      // Body drag (no snapping — snap is for track endpoints only)
+      if (this.isDragging && this.selectedBody) {
+        this.selectedBody.pos = wp.add(this.dragOffset);
         this._updateInspector();
         return;
       }
@@ -2879,6 +3233,19 @@ const App = {
 
       // Hover cursor
       if (this.tool === 'select') {
+        // Rect resize handle hover (only when paused)
+        if (!this.isPlaying && this.selectedBody && this.selectedBody.type === 'rect') {
+          const b = this.selectedBody;
+          const cos = Math.cos(b.angle), sin = Math.sin(b.angle);
+          const hw = b.width / 2, hh = b.height / 2;
+          const rH = new Vec2(b.pos.x + hw * cos, b.pos.y + hw * sin);
+          const bH = new Vec2(b.pos.x - hh * sin, b.pos.y + hh * cos);
+          const hDist = this.camera.screenDistToWorld(12);
+          if (wp.distTo(rH) < hDist || wp.distTo(bH) < hDist) {
+            canvas.style.cursor = 'nwse-resize';
+            return;
+          }
+        }
         const body = this.physics.getSelectedBody(wp, this.camera.screenDistToWorld(15));
         if (body) { canvas.style.cursor = 'grab'; return; }
         const seg = this.physics.getSelectedSegment(wp, this.camera.screenDistToWorld(8));
@@ -2953,6 +3320,8 @@ const App = {
           }
           if (this.selectedSegments.length > 0) {
             this.selectedSegment = null;
+            this.selectedBody = null;
+            this.selectedCircle = null;
             this._updateInspector();
           } else {
             // Small click (not a drag): clear selection
@@ -2981,9 +3350,11 @@ const App = {
         this.multiScaleInitial = null;
         this.multiRotateInitial = null;
         this.circleResizeStart = null;
+        this.rectResizeStart = null;
         if (this.selectedBody) {
           // Keep selected for force inspection; only deselect on explicit clear
         }
+        this._scheduleSave();
         return;
       }
 
@@ -3005,9 +3376,7 @@ const App = {
       if (e.key === '3') document.querySelector('[data-tool="pan"]').click();
       if (e.key === ' ' && e.target === document.body) {
         e.preventDefault();
-        if (this.isPlaying) {
-          document.getElementById('btn-play').click();
-        }
+        document.getElementById('btn-play').click();
       }
       if (e.key === 'g' || e.key === 'G') {
         const btn = document.getElementById('btn-add-ball');
@@ -3030,23 +3399,27 @@ const App = {
           }
           this._clearSelection();
           this.snapper.rebuild(this.physics.segments, this.physics.circles);
+          this._scheduleSave();
           return;
         }
         if (this.selectedSegment) {
           this.physics.removeSegment(this.selectedSegment);
           this._clearSelection();
           this.snapper.rebuild(this.physics.segments, this.physics.circles);
+          this._scheduleSave();
           return;
         }
         if (this.selectedBody) {
           this.physics.removeBody(this.selectedBody);
           this._clearSelection();
+          this._scheduleSave();
           return;
         }
         if (this.selectedCircle) {
           this.physics.removeCircle(this.selectedCircle);
           this._clearSelection();
           this.snapper.rebuild(this.physics.segments, this.physics.circles);
+          this._scheduleSave();
           return;
         }
       }
@@ -3085,6 +3458,7 @@ const App = {
 
     this.snapper.rebuild(this.physics.segments, this.physics.circles);
     this.drawPoints = [];
+    this._scheduleSave();
   },
 
   _clearSelection() {
@@ -3099,6 +3473,7 @@ const App = {
     this.multiScaleInitial = null;
     this.multiRotateInitial = null;
     this.circleResizeStart = null;
+    this.rectResizeStart = null;
     this.isBoxSelecting = false;
     this.boxStart = null;
     this.boxEnd = null;
@@ -3130,14 +3505,45 @@ const App = {
       rowSize.style.display = 'none';
     }
 
+    // Show/hide rect width/height sliders (only for rect bodies)
+    const rowRectW = document.getElementById('row-rect-width');
+    const rowRectH = document.getElementById('row-rect-height');
+    if (target instanceof RigidBody && target.type === 'rect') {
+      rowRectW.style.display = '';
+      rowRectH.style.display = '';
+      document.getElementById('sl-rect-width').value = target.width.toFixed(1);
+      document.getElementById('val-rect-width').textContent = target.width.toFixed(1);
+      document.getElementById('sl-rect-height').value = target.height.toFixed(1);
+      document.getElementById('val-rect-height').textContent = target.height.toFixed(1);
+    } else {
+      rowRectW.style.display = 'none';
+      rowRectH.style.display = 'none';
+    }
+
     // Show/hide mass input
     const rowMass = document.getElementById('row-ball-mass');
     if (rowMass) {
       if (target instanceof RigidBody) {
         rowMass.style.display = '';
-        document.getElementById('num-ball-mass').value = target.mass.toFixed(1);
+        const massInput = document.getElementById('num-ball-mass');
+        if (document.activeElement !== massInput) {
+          massInput.value = target.mass.toFixed(1);
+        }
       } else {
         rowMass.style.display = 'none';
+      }
+    }
+
+    // Show/hide rotation angle slider
+    const rowAngle = document.getElementById('row-ball-angle');
+    if (rowAngle) {
+      if (target instanceof RigidBody) {
+        rowAngle.style.display = '';
+        const deg = target.angle * 180 / Math.PI;
+        document.getElementById('sl-ball-angle').value = deg.toFixed(0);
+        document.getElementById('val-ball-angle').textContent = deg.toFixed(0);
+      } else {
+        rowAngle.style.display = 'none';
       }
     }
 
@@ -3180,11 +3586,17 @@ const App = {
     }
     // Update field button active states
     document.getElementById('btn-magnetic').classList.toggle('active',
-      target instanceof CollisionSegment && target.fieldType === 'magnetic');
+      (target instanceof CollisionSegment && target.fieldType === 'magnetic') ||
+      (target instanceof RigidBody && target.magneticMoment !== 0));
     document.getElementById('btn-electric').classList.toggle('active',
-      target instanceof CollisionSegment && target.fieldType === 'electric');
+      (target instanceof CollisionSegment && target.fieldType === 'electric') ||
+      (target instanceof RigidBody && target.charge !== 0));
     document.getElementById('btn-conveyor').classList.toggle('active',
       (target instanceof CollisionSegment || target instanceof CollisionCircle) && target.fieldType === 'conveyor');
+
+    // Sync point-mass button state
+    document.getElementById('btn-point-mass').classList.toggle('active',
+      target instanceof RigidBody && target.pointMass);
 
     // Multi-select: show count
     if (!target && this.selectedSegments.length > 0) {
@@ -3192,6 +3604,11 @@ const App = {
         `<div class="prop-empty" style="font-style:normal;color:#f59e0b">已选中 ${this.selectedSegments.length} 条线段</div>` +
         `<div style="font-size:10px;color:#5a6e8a;margin-top:4px;text-align:center">拖拽移动 · 缩放手柄调大小 · 旋转手柄调角度</div>` +
         `<div style="font-size:10px;color:#5a6e8a;margin-top:2px;text-align:center">Ctrl+点击取消选择 · 点击空白取消</div>`;
+      // Hide size/mass/angle controls since no single object is selected
+      document.getElementById('row-ball-size').style.display = 'none';
+      document.getElementById('row-ball-mass').style.display = 'none';
+      document.getElementById('row-ball-angle').style.display = 'none';
+      document.getElementById('pause-editor').style.display = 'none';
       return;
     }
 
@@ -3208,6 +3625,7 @@ const App = {
       html += `<div class="prop-row"><span class="prop-label">位置</span><span class="prop-value">(${target.pos.x.toFixed(1)}, ${target.pos.y.toFixed(1)})</span></div>`;
       html += `<div class="prop-row"><span class="prop-label">速度</span><span class="prop-value">${target.vel.len().toFixed(2)} m/s</span></div>`;
       html += `<div class="prop-row"><span class="prop-label">质量</span><span class="prop-value">${target.mass.toFixed(1)} kg</span></div>`;
+      html += `<div class="prop-row"><span class="prop-label">角度</span><span class="prop-value">${(target.angle * 180 / Math.PI).toFixed(1)}°</span></div>`;
       if (!isRect) {
         const pmLabel = target.pointMass ? '是' : '否';
         html += `<div class="prop-row"><span class="prop-label">质点</span><span class="prop-value">${pmLabel}</span></div>`;
@@ -3217,7 +3635,6 @@ const App = {
         }
       } else {
         html += `<div class="prop-row"><span class="prop-label">尺寸</span><span class="prop-value">${target.width.toFixed(0)}×${target.height.toFixed(0)}</span></div>`;
-        html += `<div class="prop-row"><span class="prop-label">角度</span><span class="prop-value">${(target.angle * 180 / Math.PI).toFixed(1)}°</span></div>`;
       }
       html += `<div class="prop-row"><span class="prop-label">接触</span><span class="prop-value">${target.inContact ? '是' : '否'}</span></div>`;
       // Charge / magnetic display
@@ -3278,7 +3695,7 @@ const App = {
 
   _updateInfo() {
     const el = document.getElementById('canvas-info');
-    el.textContent = `缩放: ${Math.round(this.camera.zoom * 100)}%`;
+    el.textContent = `网格: 20px · 缩放: ${Math.round(this.camera.zoom * 100)}%`;
   },
 
   // ================================================================
@@ -3543,6 +3960,26 @@ const App = {
           ctx.closePath();
           ctx.stroke();
           ctx.setLineDash([]);
+
+          // Resize handles (only when paused)
+          if (!this.isPlaying) {
+            const handleSize = 7 / zoom;
+            const hw2 = b.width / 2, hh2 = b.height / 2;
+            // Right handle (world position)
+            const rHx = b.pos.x + hw2 * cos - 0 * sin;
+            const rHy = b.pos.y + hw2 * sin + 0 * cos;
+            // Bottom handle (world position)
+            const bHx = b.pos.x + 0 * cos - hh2 * sin;
+            const bHy = b.pos.y + 0 * sin + hh2 * cos;
+
+            ctx.fillStyle = '#f59e0b';
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 1.5 / zoom;
+            for (const pt of [{ x: rHx, y: rHy }, { x: bHx, y: bHy }]) {
+              ctx.fillRect(pt.x - handleSize / 2, pt.y - handleSize / 2, handleSize, handleSize);
+              ctx.strokeRect(pt.x - handleSize / 2, pt.y - handleSize / 2, handleSize, handleSize);
+            }
+          }
         }
 
       } else if (b.pointMass) {
@@ -3670,22 +4107,18 @@ const App = {
     }
 
     // --- Snap indicators ---
-    if (this.selectedBody) {
-      this.snapper.drawSnapIndicator(ctx, this.camera);
-    }
     // Show snap points during segment movement
     if (this.isDragging && this.segDragType === 'segment' && this.selectedSegment) {
       const seg = this.selectedSegment;
       const pts = [{ x: seg.p1.x, y: seg.p1.y }, { x: seg.p2.x, y: seg.p2.y }];
       for (const p of pts) {
-        const s = this.camera.worldToScreen(p.x, p.y);
         ctx.fillStyle = 'rgba(34, 211, 238, 0.3)';
         ctx.beginPath();
-        ctx.arc(s.x, s.y, 8, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 8 / zoom, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = 'rgba(34, 211, 238, 0.6)';
         ctx.beginPath();
-        ctx.arc(s.x, s.y, 3, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 3 / zoom, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -3820,7 +4253,7 @@ const App = {
       // Line
       ctx.strokeStyle = f.color;
       ctx.lineWidth = (f.name === 'F_net' ? 3 : 2) / zoom;
-      ctx.setLineDash(f.name === 'F_net' ? [] : []);
+      ctx.setLineDash(f.name === 'F_net' ? [] : [6 / zoom, 4 / zoom]);
       ctx.globalAlpha = f.name === 'F_net' ? 0.9 : 0.7;
       ctx.beginPath();
       ctx.moveTo(body.pos.x, body.pos.y);
@@ -3983,6 +4416,195 @@ const App = {
   },
 
   // ================================================================
+  //  Auto-Save / Load (localStorage)
+  // ================================================================
+
+  _getSaveData() {
+    return {
+      version: 2,
+      physics: {
+        gravity: { x: this.physics.gravity.x, y: this.physics.gravity.y },
+        airDrag: this.physics.airDrag,
+        speed: this.physics.speed,
+        idealContactMode: this.physics.idealContactMode,
+        bodies: this.physics.bodies.map(b => ({
+          type: b.type,
+          x: b.pos.x, y: b.pos.y,
+          radius: b.radius,
+          width: b.width, height: b.height,
+          _defaultRadius: b._defaultRadius,
+          _defaultWidth: b._defaultWidth,
+          _defaultHeight: b._defaultHeight,
+          mass: b.mass,
+          restitution: b.restitution,
+          friction: b.friction,
+          angle: b.angle,
+          color: b.color,
+          label: b.label,
+          pointMass: b.pointMass,
+          visualScale: b.visualScale,
+          isStatic: b.isStatic,
+          charge: b.charge,
+          magneticMoment: b.magneticMoment
+        })),
+        segments: this.physics.segments.map(s => ({
+          x1: s.p1.x, y1: s.p1.y,
+          x2: s.p2.x, y2: s.p2.y,
+          friction: s.friction,
+          restitution: s.restitution,
+          color: s.color,
+          label: s.label,
+          fieldType: s.fieldType,
+          fieldStrength: s.fieldStrength,
+          fieldAngle: s.fieldAngle,
+          isDrawable: s.isDrawable
+        })),
+        circles: this.physics.circles.map(c => ({
+          cx: c.center.x, cy: c.center.y,
+          radius: c.radius,
+          friction: c.friction,
+          restitution: c.restitution,
+          color: c.color,
+          visible: c.visible,
+          fieldType: c.fieldType,
+          fieldStrength: c.fieldStrength,
+          fieldAngle: c.fieldAngle
+        }))
+      },
+      camera: {
+        x: this.camera.x,
+        y: this.camera.y,
+        zoom: this.camera.zoom
+      }
+    };
+  },
+
+  _applySaveData(data) {
+    if (!data || !data.physics || data.version !== 2) return false;
+    const p = data.physics;
+    // Restore physics params
+    if (p.gravity) this.physics.gravity = new Vec2(p.gravity.x, p.gravity.y);
+    if (typeof p.airDrag === 'number') this.physics.airDrag = p.airDrag;
+    if (typeof p.speed === 'number') this.physics.speed = p.speed;
+    if (typeof p.idealContactMode === 'boolean') {
+      this.physics.idealContactMode = p.idealContactMode;
+      this.idealContactMode = p.idealContactMode;
+    }
+    if (typeof p.bodies === 'object') {
+      for (const bd of p.bodies) {
+        const body = this.physics.addBody(new RigidBody({
+          type: bd.type,
+          x: bd.x, y: bd.y,
+          radius: bd.radius || 12,
+          width: bd.width || 24, height: bd.height || 24,
+          mass: bd.mass || 1,
+          restitution: typeof bd.restitution === 'number' ? bd.restitution : 0.6,
+          friction: typeof bd.friction === 'number' ? bd.friction : 0.2,
+          angle: bd.angle || 0,
+          color: bd.color || '#3b82f6',
+          label: bd.label || '',
+          pointMass: bd.pointMass || false,
+          isStatic: bd.isStatic || false,
+          charge: bd.charge || 0,
+          magneticMoment: bd.magneticMoment || 0
+        }));
+        body._defaultRadius = bd._defaultRadius ?? body.radius;
+        body._defaultWidth = bd._defaultWidth ?? body.width;
+        body._defaultHeight = bd._defaultHeight ?? body.height;
+        body.visualScale = bd.visualScale || 1.0;
+        body._initPos = body.pos.clone();
+        body._initAngle = body.angle;
+      }
+    }
+    if (typeof p.segments === 'object') {
+      for (const sd of p.segments) {
+        this.physics.addSegment(new CollisionSegment(sd.x1, sd.y1, sd.x2, sd.y2, {
+          friction: typeof sd.friction === 'number' ? sd.friction : 0.2,
+          restitution: typeof sd.restitution === 'number' ? sd.restitution : 0.6,
+          color: sd.color || '#22d3ee',
+          label: sd.label || '',
+          fieldType: sd.fieldType || 'none',
+          fieldStrength: sd.fieldStrength || 10,
+          fieldAngle: sd.fieldAngle || 0,
+          isDrawable: sd.isDrawable !== undefined ? sd.isDrawable : true
+        }));
+      }
+    }
+    if (typeof p.circles === 'object') {
+      for (const cd of p.circles) {
+        const circ = new CollisionCircle(cd.cx, cd.cy, cd.radius, {
+          friction: typeof cd.friction === 'number' ? cd.friction : 0.2,
+          restitution: typeof cd.restitution === 'number' ? cd.restitution : 0.6,
+          color: cd.color || '#8b5cf6',
+          visible: cd.visible !== undefined ? cd.visible : true,
+          fieldType: cd.fieldType || 'none',
+          fieldStrength: cd.fieldStrength || 10,
+          fieldAngle: cd.fieldAngle || 0
+        });
+        this.physics.addCircle(circ);
+      }
+    }
+    // Camera
+    if (data.camera) {
+      this.camera.x = data.camera.x || 0;
+      this.camera.y = data.camera.y || 0;
+      if (data.camera.zoom) this.camera.zoom = data.camera.zoom;
+    }
+    // 模拟默认处于停止状态（不恢复运行状态和物理时间）
+    this.isPlaying = false;
+    this.physics.running = false;
+    this.physics.time = 0;
+    this.physics.accumulator = 0;
+    this.lastTime = 0;
+    document.getElementById('btn-play').textContent = '▶ 运行';
+    document.getElementById('btn-play').className = '';
+    for (const b of this.physics.bodies) {
+      b.trail = [];
+    }
+    // Sync UI controls
+    document.getElementById('sl-gravity').value = this.physics.gravity.y.toFixed(1);
+    document.getElementById('val-gravity').textContent = this.physics.gravity.y.toFixed(1);
+    document.getElementById('sl-drag').value = (this.physics.airDrag * 100).toFixed(0);
+    document.getElementById('val-drag').textContent = this.physics.airDrag.toFixed(2);
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.classList.toggle('active', parseFloat(btn.dataset.speed) === this.physics.speed);
+    });
+    document.getElementById('btn-ideal-contact').classList.toggle('active', !!this.idealContactMode);
+    // Rebuild snapper
+    this.snapper.rebuild(this.physics.segments, this.physics.circles);
+    return true;
+  },
+
+  _saveTimer: null,
+
+  _scheduleSave() {
+    if (this._saveTimer) clearTimeout(this._saveTimer);
+    this._saveTimer = setTimeout(() => {
+      this._saveTimer = null;
+      try {
+        const data = this._getSaveData();
+        localStorage.setItem('physics_lab_save', JSON.stringify(data));
+      } catch (e) { /* storage full or unavailable */ }
+    }, 300);
+  },
+
+  _clearSave() {
+    try { localStorage.removeItem('physics_lab_save'); } catch (e) {}
+  },
+
+  _loadState() {
+    try {
+      const raw = localStorage.getItem('physics_lab_save');
+      if (!raw) return false;
+      const data = JSON.parse(raw);
+      if (data && data.version === 2) {
+        return this._applySaveData(data);
+      }
+    } catch (e) { /* corrupt data */ }
+    return false;
+  },
+
+  // ================================================================
   //  Main Loop
   // ================================================================
 
@@ -4001,15 +4623,17 @@ const App = {
         b.computeForces(this.physics.gravity, this.physics.segments);
       }
 
-      // Record trails for active bodies
-      for (const b of this.physics.bodies) {
-        if (!b.active || b.isStatic) continue;
-        if (b.vel.len() > 0.3) {
-          // Only record trail points when moving fast enough
-          const last = b.trail.length > 0 ? b.trail[b.trail.length - 1] : null;
-          if (!last || Math.hypot(b.pos.x - last.x, b.pos.y - last.y) > 2) {
-            b.trail.push({ x: b.pos.x, y: b.pos.y });
-            if (b.trail.length > b.maxTrail) b.trail.shift();
+      // Record trails for active bodies (only when playing)
+      if (this.isPlaying) {
+        for (const b of this.physics.bodies) {
+          if (!b.active || b.isStatic) continue;
+          if (b.vel.len() > 0.3) {
+            // Only record trail points when moving fast enough
+            const last = b.trail.length > 0 ? b.trail[b.trail.length - 1] : null;
+            if (!last || Math.hypot(b.pos.x - last.x, b.pos.y - last.y) > 2) {
+              b.trail.push({ x: b.pos.x, y: b.pos.y });
+              if (b.trail.length > b.maxTrail) b.trail.shift();
+            }
           }
         }
       }
